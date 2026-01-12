@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/wot_dtdl/src" modelPluginID="wot_dtdl" modelName="Wot"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="21.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>wot.ecore</foreignModel>
+  <genPackages prefix="Wot" disposableProviderFactory="true" ecorePackage="wot.ecore#/">
+    <genClasses ecoreClass="wot.ecore#//Thing">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Thing/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Thing/title"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Thing/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Thing/base"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Thing/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Thing/actions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Thing/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Thing/securityDefinitions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Thing/links"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="wot.ecore#//InteractionAffordance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//InteractionAffordance/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//InteractionAffordance/title"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//InteractionAffordance/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//InteractionAffordance/forms"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//PropertyAffordance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//PropertyAffordance/observable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//PropertyAffordance/readOnly"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//PropertyAffordance/writeOnly"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//PropertyAffordance/schema"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//ActionAffordance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//ActionAffordance/safe"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//ActionAffordance/idempotent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//ActionAffordance/input"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//ActionAffordance/output"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//EventAffordance">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//EventAffordance/data"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//DataSchema">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/title"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/unit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/readOnly"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//DataSchema/writeOnly"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//DataSchema/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//DataSchema/items"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//SecurityScheme">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//SecurityScheme/scheme"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//SecurityScheme/description"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//Form">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Form/href"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Form/contentType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Form/op"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//Link">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Link/href"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Link/rel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Link/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Link/anchor"/>
+    </genClasses>
+    <genClasses ecoreClass="wot.ecore#//Field">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute wot.ecore#//Field/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference wot.ecore#//Field/schema"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

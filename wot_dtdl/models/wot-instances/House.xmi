@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wot:Thing xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:wot="http://example.org/wot"
+    id="dtmi:housegen:House;1"
+    title="House"
+    description="Smart house with rooms">
+  <properties name="Name" title="House Name" description="Name of the house">
+    <schema type="string"/>
+  </properties>
+  <properties name="Address" title="Address" description="House address">
+    <schema type="string"/>
+  </properties>
+  <links href="dtmi:housegen:Room;1" rel="rooms" type="Relationship"/>
+</wot:Thing>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dtdl:Interface xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dtdl="http://example.org/dtdl" id="dtmi:housegen:AirConditioner;1" displayName="AirConditioner" description="Smart air conditioner">
+  <contents xsi:type="dtdl:Property" displayName="Status" description="AC on/off status" name="status" writable="true">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="BOOLEAN"/>
+  </contents>
+  <contents xsi:type="dtdl:Property" displayName="Temperature" description="Target temperature" name="temperature" writable="true">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="DOUBLE"/>
+  </contents>
+</dtdl:Interface>

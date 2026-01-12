@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/wot_dtdl/src" modelPluginID="wot_dtdl" modelName="Dtdl"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="21.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>dtdl.ecore</foreignModel>
+  <genPackages prefix="Dtdl" disposableProviderFactory="true" ecorePackage="dtdl.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="dtdl.ecore#//PrimitiveType">
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/STRING"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/BOOLEAN"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/DOUBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/LONG"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/FLOAT"/>
+      <genEnumLiterals ecoreEnumLiteral="dtdl.ecore#//PrimitiveType/DATE"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="dtdl.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Element/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Element/displayName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Element/description"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dtdl.ecore#//ContentElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//ContentElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Interface">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Interface/contents"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Telemetry">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Telemetry/schema"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Property/writable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Property/schema"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Command">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Command/request"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Command/response"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Relationship">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dtdl.ecore#//Relationship/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Relationship/targetId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Relationship/minMultiplicity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Relationship/maxMultiplicity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Relationship/writable"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//CommandPayload">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//CommandPayload/nullable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//CommandPayload/schema"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dtdl.ecore#//Schema"/>
+    <genClasses ecoreClass="dtdl.ecore#//PrimitiveSchema">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//PrimitiveSchema/type"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dtdl.ecore#//ComplexSchema"/>
+    <genClasses ecoreClass="dtdl.ecore#//Array">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Array/elementSchema"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Object">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Object/fields"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Field">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Field/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Field/schema"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//Enum">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dtdl.ecore#//Enum/enumValues"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//Enum/valueType"/>
+    </genClasses>
+    <genClasses ecoreClass="dtdl.ecore#//EnumValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//EnumValue/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dtdl.ecore#//EnumValue/enumValue"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

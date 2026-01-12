@@ -1,0 +1,36 @@
+{
+  "@context": "dtmi:dtdl:context;3",
+  "@id": "dtmi:housegen:House;1",
+  "@type": "Interface",
+  "displayName": "House",
+  "description": "Smart house with rooms",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "Name",
+      "displayName": "House Name",
+      "description": "Name of the house",
+      "writable": true,
+      "schema": "string"
+    }
+    
+,
+    {
+      "@type": "Property",
+      "name": "Address",
+      "displayName": "Address",
+      "description": "House address",
+      "writable": true,
+      "schema": "string"
+    }
+    
+,
+    {
+      "@type": "Relationship",
+      "name": "rooms",
+      "displayName": "rooms",
+      "target": "dtmi:housegen:Room;1"
+    }
+    
+  ]
+}

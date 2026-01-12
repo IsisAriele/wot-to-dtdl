@@ -1,0 +1,18 @@
+{
+  "@context": "dtmi:dtdl:context;3",
+  "@id": "dtmi:housegen:LightBulb;1",
+  "@type": "Interface",
+  "displayName": "LightBulb",
+  "description": "Smart light bulb",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "status",
+      "displayName": "Status",
+      "description": "Light on/off status",
+      "writable": true,
+      "schema": "boolean"
+    }
+    
+  ]
+}

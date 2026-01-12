@@ -1,0 +1,43 @@
+{
+  "@context": "dtmi:dtdl:context;3",
+  "@id": "dtmi:housegen:Room;1",
+  "@type": "Interface",
+  "displayName": "Room",
+  "description": "Room with temperature monitoring",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "size",
+      "displayName": "Room Size",
+      "description": "Size of the room in square feet",
+      "writable": true,
+      "schema": "double"
+    }
+    
+,
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "displayName": "Temperature",
+      "description": "Current room temperature",
+      "schema": "double"
+    }
+    
+,
+    {
+      "@type": "Relationship",
+      "name": "lights",
+      "displayName": "lights",
+      "target": "dtmi:housegen:LightBulb;1"
+    }
+    
+,
+    {
+      "@type": "Relationship",
+      "name": "airconditioner",
+      "displayName": "airconditioner",
+      "target": "dtmi:housegen:AirConditioner;1"
+    }
+    
+  ]
+}

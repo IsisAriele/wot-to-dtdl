@@ -1,0 +1,246 @@
+[comment encoding = UTF-8 /]
+[module generateDTDL('http://example.org/dtdl')/]
+
+[comment ========= Helpers (utilitários) ========= /]
+
+[query public esc(s : String) : String =
+  if s.oclIsUndefined() then ''
+  else
+    s.substituteAll('\\', '\\\\')
+     .substituteAll('"', '\\"')
+     .substituteAll('\r', '')
+     .substituteAll('\n', '\\n')
+  endif
+/]
+
+[query public safeFileName(id : String) : String =
+  if id.oclIsUndefined() or id = '' then 'dtdl_interface'
+  else
+    id.substituteAll(':', '_')
+      .substituteAll(';', '_')
+      .substituteAll('/', '_')
+  endif
+/]
+
+[query public primTypeToJson(t : PrimitiveType) : String =
+  if t.oclIsUndefined() then 'string'
+  else if t = PrimitiveType::BOOLEAN then 'boolean'
+  else if t = PrimitiveType::INTEGER then 'integer'
+  else if t = PrimitiveType::DOUBLE then 'double'
+  else if t = PrimitiveType::LONG then 'long'
+  else if t = PrimitiveType::FLOAT then 'float'
+  else if t = PrimitiveType::DATE then 'date'
+  else 'string'
+  endif endif endif endif endif endif endif
+/]
+
+[query public schemaTypeOrDefault(ps : PrimitiveSchema) : String =
+  if ps.oclIsUndefined() then 'string'
+  else if ps.type.oclIsUndefined() then 'string'
+  else ps.type.primTypeToJson()
+  endif endif
+/]
+
+[query public interfaceFileName(i : Interface) : String =
+  if not i.id.oclIsUndefined() and i.id <> '' then i.id.safeFileName().concat('.json')
+  else if not i.displayName.oclIsUndefined() and i.displayName <> '' then i.displayName.safeFileName().concat('.json')
+  else 'interface.json'
+  endif endif
+/]
+
+
+
+[template public generateElement(i : Interface)]
+[comment @main /]
+[file (i.interfaceFileName(), false, 'UTF-8')]
+{
+  "@context": "dtmi:dtdl:context;3",
+  "@id": "[i.id.esc()/]",
+  "@type": "Interface"[if (not i.displayName.oclIsUndefined() and i.displayName <> '')],[/if]
+[if (not i.displayName.oclIsUndefined() and i.displayName <> '')]
+  "displayName": "[i.displayName.esc()/]"[if (not i.description.oclIsUndefined() and i.description <> '')],[/if]
+[/if]
+[if (not i.description.oclIsUndefined() and i.description <> '')]
+  "description": "[i.description.esc()/]"[if (not i.contents->isEmpty())],[/if]
+[/if]
+[if (not i.contents->isEmpty())]
+  "contents": ['['/]
+[for (c : ContentElement | i.contents) separator(',\n')]
+    [c.toJson()/]
+[/for]
+  [']'/]
+[/if]
+}
+[/file]
+[/template]
+
+[comment ========= Polimorfismo: ContentElement -> JSON ========= /]
+
+[template public toJson(c : ContentElement)]
+[if (c.oclIsKindOf(Property))]
+[c.oclAsType(Property).propertyToJson()/]
+[elseif (c.oclIsKindOf(Telemetry))]
+[c.oclAsType(Telemetry).telemetryToJson()/]
+[elseif (c.oclIsKindOf(Command))]
+[c.oclAsType(Command).commandToJson()/]
+[elseif (c.oclIsKindOf(Relationship))]
+[c.oclAsType(Relationship).relationshipToJson()/]
+[else]
+{
+  "@type": "UnknownContent",
+  "name": "[c.name.esc()/]"
+}
+[/if]
+[/template]
+
+[comment ========= Property -> JSON ========= /]
+
+[template public propertyToJson(p : Property)]
+{
+  "@type": "Property",
+  "name": "[p.name.esc()/]"[if (not p.displayName.oclIsUndefined() and p.displayName <> '')],[/if]
+[if (not p.displayName.oclIsUndefined() and p.displayName <> '')]
+  "displayName": "[p.displayName.esc()/]"[if (not p.description.oclIsUndefined() and p.description <> '' or p.writable)],[/if]
+[/if]
+[if (not p.description.oclIsUndefined() and p.description <> '')]
+  "description": "[p.description.esc()/]"[if (p.writable)],[/if]
+[/if]
+[if (p.writable)]
+  "writable": true,
+[/if]
+  "schema": [p.schema.schemaToJson()/]
+}
+[/template]
+
+[comment ========= Telemetry -> JSON ========= /]
+
+[template public telemetryToJson(t : Telemetry)]
+{
+  "@type": "Telemetry",
+  "name": "[t.name.esc()/]"[if (not t.displayName.oclIsUndefined() and t.displayName <> '')],[/if]
+[if (not t.displayName.oclIsUndefined() and t.displayName <> '')]
+  "displayName": "[t.displayName.esc()/]"[if (not t.description.oclIsUndefined() and t.description <> '')],[/if]
+[/if]
+[if (not t.description.oclIsUndefined() and t.description <> '')]
+  "description": "[t.description.esc()/]",
+[/if]
+  "schema": [t.schema.schemaToJson()/]
+}
+[/template]
+
+[comment ========= Command -> JSON (request/response sao opcionais) ========= /]
+
+[template public commandToJson(c : Command)]
+{
+  "@type": "Command",
+  "name": "[c.name.esc()/]"[if (not c.displayName.oclIsUndefined() and c.displayName <> '')],[/if]
+[if (not c.displayName.oclIsUndefined() and c.displayName <> '')]
+  "displayName": "[c.displayName.esc()/]"[if (not c.description.oclIsUndefined() and c.description <> '' or not c.request.oclIsUndefined() or not c.response.oclIsUndefined())],[/if]
+[/if]
+[if (not c.description.oclIsUndefined() and c.description <> '')]
+  "description": "[c.description.esc()/]"[if (not c.request.oclIsUndefined() or not c.response.oclIsUndefined())],[/if]
+[/if]
+[if (not c.request.oclIsUndefined())]
+  "request": [c.request.payloadToJson()/][if (not c.response.oclIsUndefined())],[/if]
+[/if]
+[if (not c.response.oclIsUndefined())]
+  "response": [c.response.payloadToJson()/]
+[/if]
+}
+[/template]
+
+[template public payloadToJson(p : CommandPayload)]
+{
+[if (not p.id.oclIsUndefined() and p.id <> '')]
+  "name": "[p.id.esc()/]",
+[/if]
+[if (p.nullable)]
+  "nullable": true,
+[/if]
+  "schema": [p.schema.schemaToJson()/]
+}
+[/template]
+
+[comment ========= Relationship -> JSON (target ou targetId) ========= /]
+
+[query public hasTarget(r : Relationship) : Boolean =
+  not r.target.oclIsUndefined() or (not r.targetId.oclIsUndefined() and r.targetId <> '')
+/]
+
+[template public relationshipToJson(r : Relationship)]
+{
+  "@type": "Relationship",
+  "name": "[r.name.esc()/]"[if (not r.displayName.oclIsUndefined() and r.displayName <> '')],[/if]
+[if (not r.displayName.oclIsUndefined() and r.displayName <> '')]
+  "displayName": "[r.displayName.esc()/]"[if (not r.description.oclIsUndefined() and r.description <> '' or r.hasTarget() or r.minMultiplicity > 0 or r.maxMultiplicity > 0 or r.writable)],[/if]
+[/if]
+[if (not r.description.oclIsUndefined() and r.description <> '')]
+  "description": "[r.description.esc()/]"[if (r.hasTarget() or r.minMultiplicity > 0 or r.maxMultiplicity > 0 or r.writable)],[/if]
+[/if]
+[if (not r.target.oclIsUndefined())]
+  "target": "[r.target.id.esc()/]"[if (r.minMultiplicity > 0 or r.maxMultiplicity > 0 or r.writable)],[/if]
+[elseif (not r.targetId.oclIsUndefined() and r.targetId <> '')]
+  "target": "[r.targetId.esc()/]"[if (r.minMultiplicity > 0 or r.maxMultiplicity > 0 or r.writable)],[/if]
+[/if]
+[if (r.minMultiplicity > 0)]
+  "minMultiplicity": [r.minMultiplicity/][if (r.maxMultiplicity > 0 or r.writable)],[/if]
+[/if]
+[if (r.maxMultiplicity > 0)]
+  "maxMultiplicity": [r.maxMultiplicity/][if (r.writable)],[/if]
+[/if]
+[if (r.writable)]
+  "writable": true
+[/if]
+}
+[/template]
+
+[comment ========= Schema -> JSON (polimorfico) ========= /]
+
+[template public schemaToJson(s : Schema)]
+[if (s.oclIsUndefined())]
+"string"[elseif (s.oclIsKindOf(PrimitiveSchema))]
+"[s.oclAsType(PrimitiveSchema).schemaTypeOrDefault()/]"[elseif (s.oclIsKindOf(Object))]
+[s.oclAsType(Object).objectSchemaToJson()/][elseif (s.oclIsKindOf(Array))]
+[s.oclAsType(Array).arraySchemaToJson()/][elseif (s.oclIsKindOf(Enum))]
+[s.oclAsType(Enum).enumSchemaToJson()/][else]
+"string"[/if]
+[/template]
+
+[template public objectSchemaToJson(o : Object)]
+{
+  "@type": "Object"[if (not o.fields->isEmpty())],[/if]
+[if (not o.fields->isEmpty())]
+  "fields": ['['/]
+[for (f : Field | o.fields) separator(',\n')]
+    [f.fieldToJson()/]
+[/for]
+  [']'/]
+[/if]
+}
+[/template]
+
+[template public arraySchemaToJson(a : Array)]
+{
+  "@type": "Array",
+  "elementSchema": [a.elementSchema.schemaToJson()/]
+}
+[/template]
+
+[template public enumSchemaToJson(e : Enum)]
+{
+  "@type": "Enum",
+  "valueSchema": "[e.valueType.primTypeToJson()/]",
+  "enumValues": ['['/]
+[for (v : EnumValue | e.enumValues) separator(',\n')]
+    { "name": "[v.name.esc()/]", "enumValue": "[v.enumValue.esc()/]" }
+[/for]
+  [']'/]
+}
+[/template]
+
+[template public fieldToJson(f : Field)]
+{
+  "name": "[f.name.esc()/]",
+  "schema": [f.schema.schemaToJson()/]
+}
+[/template]

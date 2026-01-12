@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dtdl:Interface xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dtdl="http://example.org/dtdl" id="dtmi:housegen:House;1" displayName="House" description="Smart house with rooms">
+  <contents xsi:type="dtdl:Property" displayName="House Name" description="Name of the house" name="Name" writable="true">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="STRING"/>
+  </contents>
+  <contents xsi:type="dtdl:Property" displayName="Address" description="House address" name="Address" writable="true">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="STRING"/>
+  </contents>
+  <contents xsi:type="dtdl:Relationship" displayName="rooms" name="rooms" targetId="dtmi:housegen:Room;1"/>
+</dtdl:Interface>

@@ -1,0 +1,28 @@
+{
+  "@context": "dtmi:dtdl:context;3",
+  "@id": "dtmi:housegen:AirConditioner;1",
+  "@type": "Interface",
+  "displayName": "AirConditioner",
+  "description": "Smart air conditioner",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "status",
+      "displayName": "Status",
+      "description": "AC on/off status",
+      "writable": true,
+      "schema": "boolean"
+    }
+    
+,
+    {
+      "@type": "Property",
+      "name": "temperature",
+      "displayName": "Temperature",
+      "description": "Target temperature",
+      "writable": true,
+      "schema": "double"
+    }
+    
+  ]
+}

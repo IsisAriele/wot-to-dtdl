@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wot:Thing xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:wot="http://example.org/wot"
+    id="dtmi:housegen:LightBulb;1"
+    title="LightBulb"
+    description="Smart light bulb">
+  <properties name="status" title="Status" description="Light on/off status">
+    <schema type="boolean"/>
+  </properties>
+</wot:Thing>

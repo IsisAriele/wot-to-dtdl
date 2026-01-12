@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wot:Thing xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:wot="http://example.org/wot"
+    id="dtmi:housegen:AirConditioner;1"
+    title="AirConditioner"
+    description="Smart air conditioner">
+  <properties name="status" title="Status" description="AC on/off status">
+    <schema type="boolean"/>
+  </properties>
+  <properties name="temperature" title="Temperature" description="Target temperature">
+    <schema type="number"/>
+  </properties>
+</wot:Thing>

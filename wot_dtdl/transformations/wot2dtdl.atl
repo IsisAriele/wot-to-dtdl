@@ -1,0 +1,192 @@
+module wot2dtdl;
+create OUT : dtdl from IN : wot;
+
+-- =========================================================
+-- HELPERS
+-- =========================================================
+
+-- Mapeia tipos primitivos do WoT (JSON Schema-ish) para PrimitiveType do DTDL
+helper def: mapPrimitiveType(wotType : String) : dtdl!PrimitiveType =
+    if wotType.oclIsUndefined() or wotType = '' then #STRING
+    else if wotType = 'boolean' then #BOOLEAN
+    else if wotType = 'integer' then #INTEGER
+    else if wotType = 'number' then #DOUBLE
+    else if wotType = 'string' then #STRING
+    else #STRING
+    endif endif endif endif endif;
+
+-- Decide qual Schema DTDL gerar a partir do DataSchema do WoT
+helper def: toSchema(ds : wot!DataSchema) : dtdl!Schema =
+    if ds.oclIsUndefined() or ds.type.oclIsUndefined() or ds.type = '' then
+        thisModule.DefaultStringSchema(ds)
+    else if ds.type = 'object' then
+        thisModule.DataSchema2Object(ds)
+    else if ds.type = 'array' then
+        thisModule.DataSchema2Array(ds)
+    else
+        thisModule.DataSchema2PrimitiveSchema(ds)
+    endif endif endif;
+
+-- =========================================================
+-- LAZY RULES (Schemas)
+-- =========================================================
+
+-- Schema default: PrimitiveSchema STRING
+lazy rule DefaultStringSchema {
+    from ds : wot!DataSchema
+    to ps : dtdl!PrimitiveSchema (
+        type <- #STRING
+    )
+}
+
+-- DataSchema primitivo -> PrimitiveSchema
+lazy rule DataSchema2PrimitiveSchema {
+    from ds : wot!DataSchema
+    to ps : dtdl!PrimitiveSchema (
+        description <- ds.description,
+        type <- thisModule.mapPrimitiveType(ds.type)
+    )
+}
+
+-- DataSchema object -> Object (com fields)
+lazy rule DataSchema2Object {
+    from ds : wot!DataSchema
+    to obj : dtdl!Object (
+        description <- ds.description,
+        fields <- ds.properties->collect(f | thisModule.WoTField2DTDLField(f))
+    )
+}
+
+-- DataSchema array -> Array (elementSchema obrigatório)
+lazy rule DataSchema2Array {
+    from ds : wot!DataSchema
+    to arr : dtdl!Array (
+        description <- ds.description,
+        elementSchema <- thisModule.toSchema(ds.items)
+    )
+}
+
+-- =========================================================
+-- REGRA PRINCIPAL: Thing -> Interface
+-- =========================================================
+
+rule Thing2Interface {
+    from
+        t : wot!Thing
+    to
+        i : dtdl!Interface (
+            id <- t.id,
+            displayName <- t.title,
+            description <- t.description,
+            contents <-
+                t.properties->collect(p | thisModule.resolveTemp(p, 'prop'))
+                ->union(t.actions->collect(a | thisModule.resolveTemp(a, 'cmd')))
+                ->union(t.events->collect(e | thisModule.resolveTemp(e, 'tel')))
+                ->union(t.links->collect(l | thisModule.resolveTemp(l, 'rel')))
+        )
+}
+
+-- =========================================================
+-- PropertyAffordance -> Property
+-- =========================================================
+
+rule PropertyAffordance2Property {
+    from
+        p : wot!PropertyAffordance
+    to
+        prop : dtdl!Property (
+            name <- p.name,
+            displayName <- p.title,
+            description <- p.description,
+            writable <- not p.readOnly,
+            schema <- thisModule.toSchema(p.schema)
+        )
+}
+
+-- =========================================================
+-- ActionAffordance -> Command (request/response opcionais)
+-- Usa lazy rule para criar CommandPayload apenas quando necessário
+-- =========================================================
+
+rule ActionAffordance2Command {
+    from
+        a : wot!ActionAffordance
+    to
+        cmd : dtdl!Command (
+            name <- a.name,
+            displayName <- a.title,
+            description <- a.description,
+            request <- if a.input.oclIsUndefined()
+                       then OclUndefined
+                       else thisModule.DataSchema2CommandPayload(a.input)
+                       endif,
+            response <- if a.output.oclIsUndefined()
+                        then OclUndefined
+                        else thisModule.DataSchema2CommandPayload(a.output)
+                        endif
+        )
+}
+
+-- CommandPayload criado apenas quando necessário (evita erro com OclUndefined)
+lazy rule DataSchema2CommandPayload {
+    from
+        ds : wot!DataSchema
+    to
+        cp : dtdl!CommandPayload (
+            schema <- thisModule.toSchema(ds)
+        )
+}
+
+-- =========================================================
+-- EventAffordance -> Telemetry
+-- =========================================================
+
+rule EventAffordance2Telemetry {
+    from
+        e : wot!EventAffordance
+    to
+        tel : dtdl!Telemetry (
+            name <- e.name,
+            displayName <- e.title,
+            description <- e.description,
+            schema <- thisModule.toSchema(e.data)
+        )
+}
+
+-- =========================================================
+-- Link -> Relationship
+-- O href do WoT Link é mapeado para targetId no DTDL Relationship.
+-- Quando type='Relationship', usamos href como ID do target.
+-- =========================================================
+
+rule Link2Relationship {
+    from
+        l : wot!Link
+    to
+        rel : dtdl!Relationship (
+            name <- if not l.rel.oclIsUndefined() then l.rel else 'link' endif,
+            displayName <- l.rel,
+            -- Usa href como targetId para relacionamentos
+            targetId <- l.href,
+            -- Só adiciona description se type não for 'Relationship'
+            description <- if not l.type.oclIsUndefined() and l.type <> 'Relationship'
+                           then 'type: ' + l.type
+                           else OclUndefined
+                           endif
+        )
+}
+
+-- =========================================================
+-- Field (WoT) -> Field (DTDL)
+-- Usado dentro de Object.fields
+-- =========================================================
+
+lazy rule WoTField2DTDLField {
+    from
+        wf : wot!Field
+    to
+        df : dtdl!Field (
+            name <- wf.name,
+            schema <- thisModule.toSchema(wf.schema)
+        )
+}

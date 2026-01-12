@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dtdl:Interface xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dtdl="http://example.org/dtdl" id="dtmi:housegen:Room;1" displayName="Room" description="Room with temperature monitoring">
+  <contents xsi:type="dtdl:Property" displayName="Room Size" description="Size of the room in square feet" name="size" writable="true">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="DOUBLE"/>
+  </contents>
+  <contents xsi:type="dtdl:Telemetry" displayName="Temperature" description="Current room temperature" name="temperature">
+    <schema xsi:type="dtdl:PrimitiveSchema" type="DOUBLE"/>
+  </contents>
+  <contents xsi:type="dtdl:Relationship" displayName="lights" name="lights" targetId="dtmi:housegen:LightBulb;1"/>
+  <contents xsi:type="dtdl:Relationship" displayName="airconditioner" name="airconditioner" targetId="dtmi:housegen:AirConditioner;1"/>
+</dtdl:Interface>

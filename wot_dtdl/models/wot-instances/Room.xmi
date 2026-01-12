@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wot:Thing xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:wot="http://example.org/wot"
+    id="dtmi:housegen:Room;1"
+    title="Room"
+    description="Room with temperature monitoring">
+  <properties name="size" title="Room Size" description="Size of the room in square feet">
+    <schema type="number"/>
+  </properties>
+  <events name="temperature" title="Temperature" description="Current room temperature">
+    <data type="number"/>
+  </events>
+  <links href="dtmi:housegen:LightBulb;1" rel="lights" type="Relationship"/>
+  <links href="dtmi:housegen:AirConditioner;1" rel="airconditioner" type="Relationship"/>
+</wot:Thing>
